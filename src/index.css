@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  /* Blue accent */
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-400: #60a5fa;
+
+  /* Red accent */
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-400: #f87171;
+
+  /* Dark surface palette */
+  --color-dark-950: #030712;
+  --color-dark-900: #0a0f1a;
+  --color-dark-800: #111827;
+  --color-dark-700: #1f2937;
+  --color-dark-600: #374151;
+
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+}
+
+/* ===== GLOBAL DARK MODE ===== */
+body {
+  @apply bg-gray-950 text-gray-100;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+#root {
+  min-height: 100vh;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #111827; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+
+/* ===== GLOBAL TRANSITIONS & HOVERS ===== */
+.card {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.15),
+    0 0 40px rgba(239, 68, 68, 0.1);
+  border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+button:not(:disabled) {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+button:not(:disabled):hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
+}
+button:not(:disabled):active {
+  transform: translateY(0px) scale(0.97);
+}
+
+/* ===== SIDEBAR NAV ===== */
+nav a {
+  transition: all 0.25s ease-in-out;
+}
+nav a:hover {
+  transform: translateX(4px);
+}
+
+/* ===== GLOW EFFECTS ===== */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+.glow-red {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+/* ===== ANIMATED GRADIENT BAR ===== */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animated-gradient {
+  background: linear-gradient(90deg, #3b82f6, #ef4444, #3b82f6);
+  background-size: 200% 100%;
+  animation: gradient-shift 4s ease infinite;
+}
