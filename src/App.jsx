@@ -6,6 +6,7 @@ import Login from './pages/shared/Login';
 import StudentLogin from './pages/shared/StudentLogin';
 import TeacherLogin from './pages/shared/TeacherLogin';
 import AdminLogin from './pages/shared/AdminLogin';
+import SchedulerLogin from './pages/shared/SchedulerLogin';
 
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -22,6 +23,11 @@ import ManageTeachers from './pages/admin/ManageTeachers';
 import ScheduleClass from './pages/admin/ScheduleClass';
 import AdminReports from './pages/admin/AdminReports';
 
+// Scheduler Pages
+import SchedulerDashboard from './pages/scheduler/SchedulerDashboard';
+import AddClass from './pages/scheduler/AddClass';
+import ViewSchedule from './pages/scheduler/ViewSchedule';
+
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +39,7 @@ function App() {
           <Route path="/login/student" element={<StudentLogin />} />
           <Route path="/login/teacher" element={<TeacherLogin />} />
           <Route path="/login/admin" element={<AdminLogin />} />
+          <Route path="/login/scheduler" element={<SchedulerLogin />} />
         </Route>
 
         {/* Student routes */}
@@ -57,6 +64,14 @@ function App() {
           <Route path="teachers" element={<ManageTeachers />} />
           <Route path="schedule" element={<ScheduleClass />} />
           <Route path="reports" element={<AdminReports />} />
+        </Route>
+
+        {/* Scheduler routes — dedicated class scheduling portal */}
+        <Route path="/scheduler" element={<DashboardLayout role="scheduler" />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<SchedulerDashboard />} />
+          <Route path="add-class" element={<AddClass />} />
+          <Route path="view-schedule" element={<ViewSchedule />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

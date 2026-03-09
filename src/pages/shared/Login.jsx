@@ -37,7 +37,7 @@ const Login = () => {
       title: 'Class Scheduler',
       description: 'Schedule & organize classes',
       icon: CalendarCheck,
-      path: '/login/admin',
+      path: '/login/scheduler',
       accent: 'border-amber-500/30 hover:border-amber-400',
       iconBg: 'bg-amber-900/30 text-amber-400',
     }

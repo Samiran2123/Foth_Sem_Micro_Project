@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Home, QrCode, ClipboardList, BookOpen, Users, Calendar, Menu, X } from 'lucide-react';
+import { LogOut, Home, QrCode, ClipboardList, BookOpen, Users, Calendar, CalendarCheck, Plus, Menu, X } from 'lucide-react';
 
 const DashboardLayout = ({ role }) => {
   const navigate = useNavigate();
@@ -29,6 +29,12 @@ const DashboardLayout = ({ role }) => {
           { name: 'Teachers', path: '/admin/teachers', icon: Users },
           { name: 'Schedule', path: '/admin/schedule', icon: Calendar },
           { name: 'Reports', path: '/admin/reports', icon: ClipboardList },
+        ];
+      case 'scheduler':
+        return [
+          { name: 'Dashboard', path: '/scheduler/dashboard', icon: Home },
+          { name: 'Add Class', path: '/scheduler/add-class', icon: Plus },
+          { name: 'View Schedule', path: '/scheduler/view-schedule', icon: CalendarCheck },
         ];
       default:
         return [];
