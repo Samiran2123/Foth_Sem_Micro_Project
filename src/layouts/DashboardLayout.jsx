@@ -1,53 +1,77 @@
+/**
+ * DashboardLayout.jsx
+ * Shared shell for all authenticated dashboards.
+ * Reads user + role from AuthContext — shows real name/avatar.
+ */
+
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Home, QrCode, ClipboardList, BookOpen, Users, Calendar, CalendarCheck, Plus, Menu, X } from 'lucide-react';
+import {
+  LogOut, Home, QrCode, ClipboardList,
+  Users, Calendar, CalendarCheck, Plus,
+  Menu, X, Shield, UserCheck,
+} from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const DashboardLayout = ({ role }) => {
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
-    navigate('/login');
+    logout();
+    navigate('/login', { replace: true });
   };
 
   const getLinks = () => {
     switch (role) {
       case 'student':
         return [
-          { name: 'Dashboard', path: '/student/dashboard', icon: Home },
-          { name: 'Scan QR', path: '/student/scan', icon: QrCode },
-          { name: 'History', path: '/student/history', icon: ClipboardList },
+          { name: 'Dashboard',  path: '/student/dashboard',  icon: Home },
+          { name: 'Scan QR',    path: '/student/scan',        icon: QrCode },
+          { name: 'History',    path: '/student/history',     icon: ClipboardList },
         ];
       case 'teacher':
         return [
-          { name: 'Dashboard', path: '/teacher/dashboard', icon: Home },
-          { name: 'Generate QR', path: '/teacher/qr-generate', icon: QrCode },
+          { name: 'Dashboard',    path: '/teacher/dashboard',    icon: Home },
+          { name: 'Generate QR',  path: '/teacher/qr-generate',  icon: QrCode },
         ];
       case 'admin':
         return [
-          { name: 'Dashboard', path: '/admin/dashboard', icon: Home },
-          { name: 'Teachers', path: '/admin/teachers', icon: Users },
-          { name: 'Schedule', path: '/admin/schedule', icon: Calendar },
-          { name: 'Reports', path: '/admin/reports', icon: ClipboardList },
+          { name: 'Dashboard',    path: '/admin/dashboard',   icon: Home },
+          { name: 'Users',        path: '/admin/users',        icon: UserCheck },
+          { name: 'Teachers',     path: '/admin/teachers',     icon: Users },
+          { name: 'Schedule',     path: '/admin/schedule',     icon: Calendar },
+          { name: 'Reports',      path: '/admin/reports',      icon: ClipboardList },
         ];
       case 'scheduler':
         return [
-          { name: 'Dashboard', path: '/scheduler/dashboard', icon: Home },
-          { name: 'Add Class', path: '/scheduler/add-class', icon: Plus },
-          { name: 'View Schedule', path: '/scheduler/view-schedule', icon: CalendarCheck },
+          { name: 'Dashboard',      path: '/scheduler/dashboard',      icon: Home },
+          { name: 'Add Class',      path: '/scheduler/add-class',       icon: Plus },
+          { name: 'View Schedule',  path: '/scheduler/view-schedule',   icon: CalendarCheck },
         ];
       default:
         return [];
     }
   };
 
-  const links = getLinks();
+  const links       = getLinks();
+  const displayName = user?.name || user?.['cognito:username'] || role;
+  const initials    = displayName.slice(0, 2).toUpperCase();
+
+  const ROLE_COLORS = {
+    admin:     'from-green-500  to-emerald-600',
+    teacher:   'from-red-500    to-rose-600',
+    scheduler: 'from-amber-500  to-orange-600',
+    student:   'from-blue-500   to-indigo-600',
+  };
+  const avatarGradient = ROLE_COLORS[role] || 'from-blue-500 to-red-500';
 
   return (
     <div className="min-h-screen bg-gray-950 flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -72,6 +96,22 @@ const DashboardLayout = ({ role }) => {
 
         {/* Animated gradient bar */}
         <div className="h-0.5 animated-gradient" />
+
+        {/* User info */}
+        <div className="px-4 py-4 border-b border-gray-800">
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarGradient} flex items-center justify-center text-white text-sm font-bold shadow-md shrink-0`}>
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-white truncate">{displayName}</p>
+              <p className="text-xs text-gray-500 capitalize flex items-center gap-1">
+                {role === 'admin' && <Shield className="w-3 h-3" />}
+                {role}
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Nav links */}
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -125,9 +165,13 @@ const DashboardLayout = ({ role }) => {
             <span className="text-blue-400">{role}</span> Portal
           </h2>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-red-500 flex items-center justify-center text-white font-bold shadow-lg">
-              {role.charAt(0).toUpperCase()}
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex flex-col items-end">
+              <span className="text-xs text-white font-medium">{displayName}</span>
+              <span className="text-xs text-gray-500 capitalize">{role}</span>
+            </div>
+            <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarGradient} flex items-center justify-center text-white font-bold shadow-lg shrink-0`}>
+              {initials}
             </div>
           </div>
         </header>
